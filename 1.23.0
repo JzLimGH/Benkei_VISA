@@ -1,0 +1,14 @@
+Collecting google-auth
+  Obtaining dependency information for google-auth from https://files.pythonhosted.org/packages/28/b1/2f3dc4c814a83e618a0a624f37bcc885fd8c2f2af6f0e547288d2c4f64c2/google_auth-2.30.0-py2.py3-none-any.whl.metadata
+  Downloading google_auth-2.30.0-py2.py3-none-any.whl.metadata (4.7 kB)
+Requirement already satisfied: cachetools<6.0,>=2.0.0 in c:\users\jonlim\anaconda3\lib\site-packages (from google-auth) (5.3.3)
+Requirement already satisfied: pyasn1-modules>=0.2.1 in c:\users\jonlim\anaconda3\lib\site-packages (from google-auth) (0.2.8)
+Collecting rsa<5,>=3.1.4 (from google-auth)
+  Obtaining dependency information for rsa<5,>=3.1.4 from https://files.pythonhosted.org/packages/49/97/fa78e3d2f65c02c8e1268b9aba606569fe97f6c8f7c2d74394553347c145/rsa-4.9-py3-none-any.whl.metadata
+  Downloading rsa-4.9-py3-none-any.whl.metadata (4.2 kB)
+Requirement already satisfied: pyasn1<0.5.0,>=0.4.6 in c:\users\jonlim\anaconda3\lib\site-packages (from pyasn1-modules>=0.2.1->google-auth) (0.4.8)
+Downloading google_auth-2.30.0-py2.py3-none-any.whl (193 kB)
+   ---------------------------------------- 193.7/193.7 kB 3.9 MB/s eta 0:00:00
+Downloading rsa-4.9-py3-none-any.whl (34 kB)
+Installing collected packages: rsa, google-auth
+Successfully installed google-auth-2.30.0 rsa-4.9

@@ -4,7 +4,16 @@ import numpy as np
 import requests
 from PIL import Image
 from io import BytesIO
+from shillelagh.backends.apsw.db import connect
+import datetime
 
+connection = connect(":memory:",
+                     adapter_kwargs = {
+                            "gsheetsapi": { 
+                            "service_account_info":  dict(st.secrets["gcp_service_account"])
+                                    }
+                                        }
+                        )
 # -- Set page config
 apptitle = 'Benkei VISA'
 
@@ -68,9 +77,34 @@ mule_1 = st.text_input("Mule 1 Name: ", key = 'mule_1')
 mule_2 = st.text_input("Mule 2 Name: ", key = 'mule_2')
 mule_3 = st.text_input("Mule 3 Name: ", key = 'mule_3')
 
+
+#Create dataset to upload
+df_upload = pd.DataFrame({'MULE' : [mule_1, mule_2, mule_3]
+})
+df_upload['NAME'] = pd.Series(name_input, index = df_upload.index)
+df_upload['MAIN'] = pd.Series(character_name_input, index = df_upload.index)
+df_upload['MAIN_LEVEL'] = pd.Series(Level, index = df_upload.index)
+df_upload['LEGION'] = pd.Series(Legion, index = df_upload.index)
+
+#set up timestamp
+load_date = datetime.datetime.now().strftime("%Y/%m/%d")
+df_upload['DATE_LOADED'] = pd.Series(load_date, index = df_upload.index)
+
+#adjust col order
+col_order = ['NAME','MAIN', 'MAIN_LEVEL', 'LEGION','MULE','DATE_LOADED']
+df_upload = df_upload[col_order]
+#trim to non_empty Mule names
+df_upload = df_upload.loc[df_upload['MULE'].ne('')]
+st.text("Preview data to upload:")
+st.write(df_upload)
 def submit_form():
-
-
+    sheet_url = st.secrets["private_gsheets_url"]
+    for i, row in df_upload.iterrows():
+        insert = f"""
+                INSERT INTO "{sheet_url}" (NAME, MAIN, MAIN_LEVEL, LEGION, MULE, DATE_LOADED)
+                VALUES ("{row['NAME']}", "{row['MAIN']}", "{row['MAIN_LEVEL']}","{row['LEGION']}","{row['MULE']}","{row['DATE_LOADED']}")
+                """
+        connection.execute(insert)
 
     #disable button after form is submitted
     st.session_state['disable_submit'] = True   
